@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
+import Swal from 'sweetalert2'
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { TareaContext } from '../context/TareaContext';
@@ -20,11 +21,29 @@ const TareaForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (params.id) {
-      modificarTarea(tarea)
-    } else {
-      crearTarea(tarea);
-    }
+
+    Swal.fire({
+      title: 'Guardar los cambios?',
+      showDenyButton: true,
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Aceptar',
+      denyButtonText: `Descartar`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        Swal.fire('Tarea guardada!', '', 'success')
+        if (params.id) {
+          modificarTarea(tarea)
+        } else {
+          crearTarea(tarea);
+        }
+      } else if (result.isDenied) {
+        Swal.fire('No se guardo la tarea', '', 'info')
+      }
+    })
+    
+   
     navigate('/');
   };
   useEffect(() => {
