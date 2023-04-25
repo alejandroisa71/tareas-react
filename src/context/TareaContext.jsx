@@ -1,45 +1,51 @@
-import { createContext, useState, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { createContext, useReducer } from 'react';
+import tareaReducer from './TareaReducer';
+import { v4 } from 'uuid';
 
-import { tareas as data } from '../data/tareas';
+const initialState = {
+  tareas: [],
+};
 
-export const TareaContext = createContext();
+export const TareaContext = createContext(initialState);
 
-export const TareaContextProvider = (props) => {
-  const [tareas, setTareas] = useState([]);
-  const [tarea, setTarea] = useState({});
+export const ContextProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(tareaReducer, initialState);
 
-  const crearTarea = (tituloTarea) => {
-    setTareas([
-      ...tareas,
-      {
-        titulo: tituloTarea,
-        id: uuidv4(),
-        completada: false,
+  const crearTarea = (tarea) => {
+    dispatch({
+      type: 'AGREGAR_TAREA',
+      payload: {
+        ...tarea,
+        id: v4(),
+        completada:false
       },
-    ]);
-  };
-  const eliminarTarea = (tareaId) => {
-    setTareas(tareas.filter((tarea) => tarea.id !== tareaId));
-  };
-  const buscarTarea = (tareaId) => {
-    const tareaEncontrada = tareas.find((tarea) => tarea.id === tareaId);
-    if (tareaEncontrada) {
-      setTarea(tareaEncontrada);
-      console.log(tareaEncontrada.titulo)
-      // setTareas([...tareas,])
-    }
+    });
   };
 
-  useEffect(() => {
-    setTareas(data);
-  }, []);
+  const eliminarTarea = (id) => {
+    dispatch({
+      type: 'ELIMINAR_TAREA',
+      payload: id,
+    });
+  };
+
+  const modificarTarea = (tarea) => {
+    dispatch({ type: 'MODIFICAR_TAREA', payload: tarea });
+  };
+
+  const tareaHecha = (id) => dispatch({ type: 'TAREA_HECHA', payload: id });
 
   return (
     <TareaContext.Provider
-      value={{ tareas, tarea, crearTarea, eliminarTarea, buscarTarea }}
+      value={{
+        ...state,
+        crearTarea,
+        eliminarTarea,
+        modificarTarea,
+        tareaHecha,
+      }}
     >
-      {props.children}
+      {children}
     </TareaContext.Provider>
   );
 };
