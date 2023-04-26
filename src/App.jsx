@@ -7,7 +7,7 @@ import { ContextProvider } from './context/TareaContext';
 
 const App = () => {
   return (
-    <main className="bg-zinc-500 h-screen">
+    <main className="bg-zinc-500 h-full">
       <div className="container mx-auto p-10">
         <ContextProvider>
           <Heading />
