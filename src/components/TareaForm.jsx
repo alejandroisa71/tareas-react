@@ -41,10 +41,10 @@ const TareaForm = () => {
       } else if (result.isDenied) {
         Swal.fire('No se guardo la tarea', '', 'info')
       }
+      navigate('/');
     })
     
    
-    navigate('/');
   };
   useEffect(() => {
     const tareaEncontrada = tareas.find((tarea) => tarea.id === params.id);
