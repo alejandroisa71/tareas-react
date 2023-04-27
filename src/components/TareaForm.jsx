@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import Swal from 'sweetalert2'
 import { useNavigate, useParams } from 'react-router-dom';
 
+
 import { TareaContext } from '../context/TareaContext';
 
 const TareaForm = () => {
@@ -54,7 +55,7 @@ const TareaForm = () => {
   }, [params.id, tareas]);
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-md mx-auto h-screen">
       <form onSubmit={handleSubmit} className="bg-slate-800 p-10 mb-4">
         <h1 className="text-2xl font-bold text-white mb-3">{params.id ? 'Edita Tarea' : 'Crea Tarea'}</h1>
         <input
